@@ -10,7 +10,9 @@ import Foundation
 
 public final class DefaultNewsUseCase: NewsUseCase {
     private let networkClient: NetworkClient
-    private var cache = [NewsArticle]()
+
+    // Having private(set) for testing only
+    private(set) var cache = [NewsArticle]()
 
     public init(networkClient: NetworkClient) {
         self.networkClient = networkClient

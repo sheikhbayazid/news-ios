@@ -10,12 +10,12 @@ import AppFoundation
 import Foundation
 
 /// Internal object for parsing the news network response.
-struct NewsNetworkResponse: Decodable {
+struct NewsNetworkResponse: Codable {
     let status: String
     let totalResults: Int
     let articles: [Article]
 
-    struct Article: Decodable {
+    struct Article: Codable {
         let source: Source
         let author: String?
 
@@ -28,7 +28,7 @@ struct NewsNetworkResponse: Decodable {
         let publishedAt: Date?
         public let content: String
 
-        struct Source: Decodable {
+        struct Source: Codable {
             let id: String?
             let name: String
         }
