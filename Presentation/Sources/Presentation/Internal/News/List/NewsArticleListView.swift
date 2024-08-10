@@ -46,7 +46,7 @@ struct NewsArticleListView: View {
             let article = viewModel.articles[index]
 
             NavigationLink {
-                Text(markdown: article.content)
+                ArticleDetailsView(article: article)
             } label: {
                 ArticlePreviewView(article: article)
             }

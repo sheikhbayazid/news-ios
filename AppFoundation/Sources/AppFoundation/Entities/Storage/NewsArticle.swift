@@ -42,7 +42,7 @@ public class NewsArticle {
         }
 
         if let urlToImage {
-            self.urlToImage = URL(string: urlToImage) ?? nil
+            self.urlToImage = URL(string: urlToImage)
         }
 
         self.publishedAt = publishedAt
