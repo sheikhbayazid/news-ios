@@ -17,20 +17,8 @@ struct ArticlePreviewView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            if let urlToImage = article.urlToImage, let imageURL = URL(string: urlToImage) {
-                AsyncImage(url: imageURL) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(.rect(cornerRadius: 12))
-                    } else if phase.error != nil {
-                        Image(systemName: "questionmark.diamond")
-                            .imageScale(.large)
-                    } else {
-                        ProgressView()
-                    }
-                }
+            if let urlToImage = article.urlToImage {
+                CustomAsyncImage(url: urlToImage)
             }
 
             ArticleSummeryView(article: article)
