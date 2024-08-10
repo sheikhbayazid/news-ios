@@ -10,9 +10,7 @@ import Foundation
 
 public final class DefaultNewsUseCase: NewsUseCase {
     private let networkClient: NetworkClient
-
     private var cache = [NewsArticle]()
-    private let removedArticleID = "[Removed]"
 
     public init(networkClient: NetworkClient) {
         self.networkClient = networkClient
@@ -39,9 +37,11 @@ public final class DefaultNewsUseCase: NewsUseCase {
         )
         let newsArticles = response.articles.map(\.newsArticle)
 
-        // Filtering the articles to not include removed articles.
+        // Some articles are removed and doesn't have content, so filtering
+        // the articles so that it doesn't include any removed articles.
+        let removedArticleTitle = "[Removed]"
         let articles = newsArticles.filter {
-            $0.title != removedArticleID
+            $0.title != removedArticleTitle
         }
         cache = articles
         return articles

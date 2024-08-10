@@ -26,6 +26,8 @@ struct CustomAsyncImage: View {
     }
 }
 
+// swiftlint: disable force_unwrapping
 #Preview {
     CustomAsyncImage(url: URL(string: "https://media.wired.com/photos/66b3cac3a922a7712a7c43e0/191:100/w_1280,c_limit/Crash-Reports-Sec-140000036.jpg")!)
 }
+// swiftlint: enable force_unwrapping
