@@ -6,9 +6,13 @@
 //
 
 import AppFoundation
+import SwiftData
 import SwiftUI
 
 struct NewsArticleListView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var storedArticles: [NewsArticle]
+
     @StateObject private var viewModel: NewsArticleListViewModel
 
     init(newsUseCase: NewsUseCase) {
@@ -20,10 +24,16 @@ struct NewsArticleListView: View {
             container()
         }
         .onAppear {
-            viewModel.getAllNewsArticles()
+            viewModel.getAllNewsArticles(
+                context: modelContext,
+                storedArticles: storedArticles
+            )
         }
         .refreshable {
-            await viewModel.refreshArticles()
+            await viewModel.refreshArticles(
+                context: modelContext,
+                storedArticles: storedArticles
+            )
         }
         .navigationTitle("News")
     }
@@ -58,4 +68,5 @@ struct NewsArticleListView: View {
     NavigationStack {
         NewsArticleListView(newsUseCase: PreviewNewsUseCase())
     }
+    .modelContainer(for: NewsArticle.self, inMemory: true)
 }

@@ -7,6 +7,7 @@
 
 import AppFoundation
 import Foundation
+import SwiftData
 
 final class NewsArticleListViewModel: ObservableObject {
     private let newsUseCase: NewsUseCase
@@ -20,7 +21,7 @@ final class NewsArticleListViewModel: ObservableObject {
         self.newsUseCase = newsUseCase
     }
 
-    func getAllNewsArticles() {
+    func getAllNewsArticles(context: ModelContext, storedArticles: [NewsArticle]) {
         isLoading = true
 
         Task { @MainActor in
@@ -32,16 +33,18 @@ final class NewsArticleListViewModel: ObservableObject {
                 } else {
                     self.articles = articles
                     self.emptyState = nil
+
+                    saveArticlesToStorage(context: context, articles: articles)
                 }
             } catch {
-                self.emptyState = .networkError
+                setNetworkErrorState(with: storedArticles)
             }
 
             isLoading = false
         }
     }
 
-    func refreshArticles() async {
+    func refreshArticles(context: ModelContext, storedArticles: [NewsArticle]) async {
         do {
             let articles = try await newsUseCase.getAllNewsArticles(forceRefresh: true)
 
@@ -51,12 +54,40 @@ final class NewsArticleListViewModel: ObservableObject {
                 } else {
                     self.articles = articles
                     self.emptyState = nil
+
+                    self.saveArticlesToStorage(context: context, articles: articles)
                 }
             }
         } catch {
             DispatchQueue.main.async {
-                self.emptyState = .networkError
+                self.setNetworkErrorState(with: storedArticles)
             }
         }
     }
+
+    private func setNetworkErrorState(with storedArticles: [NewsArticle]) {
+        if storedArticles.isEmpty {
+            self.emptyState = .networkError
+        } else if articles.isEmpty {
+            articles = storedArticles
+        }
+    }
+
+    /// Saves the data to the device storage.
+    private func saveArticlesToStorage(context: ModelContext, articles: [NewsArticle]) {
+        do {
+            // Remove existing stored data
+            try context.delete(model: NewsArticle.self)
+
+            // Save new data
+            articles.forEach {
+                context.insert($0)
+            }
+        } catch {
+            debugPrint(error)
+        }
+    }
 }
+
+// Removes warning for the sendable conformance.
+extension ModelContext: @unchecked Sendable { }
