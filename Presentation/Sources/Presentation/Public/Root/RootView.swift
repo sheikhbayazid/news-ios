@@ -16,6 +16,8 @@ public struct RootView: View {
     }
 
     public var body: some View {
-        Text("RootView")
+        NavigationStack {
+            NewsArticleListView(newsUseCase: newsUseCase)
+        }
     }
 }
