@@ -14,6 +14,13 @@
   "testTargets" : [
     {
       "target" : {
+        "containerPath" : "container:Domain",
+        "identifier" : "DomainTests",
+        "name" : "DomainTests"
+      }
+    },
+    {
+      "target" : {
         "containerPath" : "container:Network",
         "identifier" : "NetworkTests",
         "name" : "NetworkTests"
