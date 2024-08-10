@@ -25,6 +25,7 @@
 		406A275B2C67792300460015 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		406A27622C6779BE00460015 /* AppFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppFoundation; sourceTree = "<group>"; };
 		406A27662C677A9500460015 /* Network */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Network; sourceTree = "<group>"; };
+		40E8D2AD2C677C46002F758A /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +44,7 @@
 		406A27462C67792200460015 = {
 			isa = PBXGroup;
 			children = (
+				40E8D2AD2C677C46002F758A /* TestPlan.xctestplan */,
 				406A27622C6779BE00460015 /* AppFoundation */,
 				406A27662C677A9500460015 /* Network */,
 				406A27512C67792200460015 /* News */,
