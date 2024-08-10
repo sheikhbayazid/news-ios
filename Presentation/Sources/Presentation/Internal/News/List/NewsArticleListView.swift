@@ -39,12 +39,12 @@ struct NewsArticleListView: View {
             content()
         }
     }
-    
+
     @ViewBuilder
     private func content() -> some View {
         ForEach(0..<viewModel.articles.indices.count, id: \.self) { index in
             let article = viewModel.articles[index]
-            
+
             NavigationLink {
                 Text(markdown: article.content)
             } label: {

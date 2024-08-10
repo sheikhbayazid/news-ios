@@ -27,11 +27,11 @@ final class NewsArticleListViewModel: ObservableObject {
             do {
                 let articles = try await newsUseCase.getAllNewsArticles()
 
-                if !articles.isEmpty {
-                    self.articles = articles
-                    emptyState = nil
-                } else {
+                if articles.isEmpty {
                     emptyState = .noData
+                } else {
+                    self.articles = articles
+                    self.emptyState = nil
                 }
             } catch {
                 self.emptyState = .networkError
@@ -46,11 +46,11 @@ final class NewsArticleListViewModel: ObservableObject {
             let articles = try await newsUseCase.getAllNewsArticles()
 
             DispatchQueue.main.async {
-                if !articles.isEmpty {
+                if articles.isEmpty {
+                    self.emptyState = .noData
+                } else {
                     self.articles = articles
                     self.emptyState = nil
-                } else {
-                    self.emptyState = .noData
                 }
             }
         } catch {
