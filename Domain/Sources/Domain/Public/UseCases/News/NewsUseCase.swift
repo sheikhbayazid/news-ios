@@ -10,15 +10,23 @@ import Foundation
 
 public final class DefaultNewsUseCase: NewsUseCase {
     private let networkClient: NetworkClient
+    private let removedArticleID = "[Removed]"
 
     public init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
 
-    // TODO: Remove articles that are labeled with '[Remove]'
     /// Gets all the news articles or throws an error.
     public func getAllNewsArticles() async throws -> [NewsArticle] {
-        let response = try await networkClient.get(path: "everything?q=apple", type: NewsNetworkResponse.self)
-        return response.articles.map(\.newsArticle)
+        let response = try await networkClient.get(
+            path: "everything?q=apple",
+            type: NewsNetworkResponse.self
+        )
+        let newsArticles = response.articles.map(\.newsArticle)
+
+        // Filtering the articles to not include removed articles.
+        return newsArticles.filter {
+            $0.title != removedArticleID
+        }
     }
 }
