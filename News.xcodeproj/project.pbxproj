@@ -13,6 +13,7 @@
 		406A27592C67792300460015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 406A27582C67792300460015 /* Assets.xcassets */; };
 		406A275C2C67792300460015 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 406A275B2C67792300460015 /* Preview Assets.xcassets */; };
 		406A27652C6779DD00460015 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27642C6779DD00460015 /* AppFoundation */; };
+		406A27682C677AAA00460015 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27672C677AAA00460015 /* Network */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		406A27582C67792300460015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		406A275B2C67792300460015 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		406A27622C6779BE00460015 /* AppFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppFoundation; sourceTree = "<group>"; };
+		406A27662C677A9500460015 /* Network */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Network; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +33,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				406A27652C6779DD00460015 /* AppFoundation in Frameworks */,
+				406A27682C677AAA00460015 /* Network in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +44,7 @@
 			isa = PBXGroup;
 			children = (
 				406A27622C6779BE00460015 /* AppFoundation */,
+				406A27662C677A9500460015 /* Network */,
 				406A27512C67792200460015 /* News */,
 				406A27502C67792200460015 /* Products */,
 				406A27632C6779DD00460015 /* Frameworks */,
@@ -100,6 +104,7 @@
 			name = News;
 			packageProductDependencies = (
 				406A27642C6779DD00460015 /* AppFoundation */,
+				406A27672C677AAA00460015 /* Network */,
 			);
 			productName = News;
 			productReference = 406A274F2C67792200460015 /* News.app */;
@@ -368,6 +373,10 @@
 		406A27642C6779DD00460015 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
+		};
+		406A27672C677AAA00460015 /* Network */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Network;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
