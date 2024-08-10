@@ -5,14 +5,20 @@
 //  Created by Sheikh Bayazid on 2024-08-10.
 //
 
+import AppFoundation
+import Domain
+import Network
+import Presentation
 import SwiftData
 import SwiftUI
 
 @main
 struct NewsApp: App {
-    var sharedModelContainer: ModelContainer = {
+    private let newsUseCase: NewsUseCase
+
+    private var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self
+            NewsArticle.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -23,9 +29,20 @@ struct NewsApp: App {
         }
     }()
 
+    init() {
+        let networkClient = RestAPINetworkClient(
+            endpoint: .init(
+                baseURL: "https://newsapi.org",
+                version: "v2",
+                apiKey: "API_KEY"
+            )
+        )
+        newsUseCase = DefaultNewsUseCase(networkClient: networkClient)
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView(newsUseCase: newsUseCase)
         }
         .modelContainer(sharedModelContainer)
     }
