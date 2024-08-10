@@ -15,6 +15,7 @@
 		406A27652C6779DD00460015 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27642C6779DD00460015 /* AppFoundation */; };
 		406A27682C677AAA00460015 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27672C677AAA00460015 /* Network */; };
 		40BC69E32C67829D00A319C1 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 40BC69E22C67829D00A319C1 /* Domain */; };
+		40BC69E62C67882400A319C1 /* Presentation in Frameworks */ = {isa = PBXBuildFile; productRef = 40BC69E52C67882400A319C1 /* Presentation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		406A27622C6779BE00460015 /* AppFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppFoundation; sourceTree = "<group>"; };
 		406A27662C677A9500460015 /* Network */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Network; sourceTree = "<group>"; };
 		40BC69E12C67828800A319C1 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
+		40BC69E42C6787E300A319C1 /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Presentation; sourceTree = "<group>"; };
 		40E8D2AD2C677C46002F758A /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40BC69E62C67882400A319C1 /* Presentation in Frameworks */,
 				40BC69E32C67829D00A319C1 /* Domain in Frameworks */,
 				406A27652C6779DD00460015 /* AppFoundation in Frameworks */,
 				406A27682C677AAA00460015 /* Network in Frameworks */,
@@ -50,6 +53,7 @@
 				40E8D2AD2C677C46002F758A /* TestPlan.xctestplan */,
 				406A27622C6779BE00460015 /* AppFoundation */,
 				40BC69E12C67828800A319C1 /* Domain */,
+				40BC69E42C6787E300A319C1 /* Presentation */,
 				406A27662C677A9500460015 /* Network */,
 				406A27512C67792200460015 /* News */,
 				406A27502C67792200460015 /* Products */,
@@ -113,6 +117,7 @@
 				406A27642C6779DD00460015 /* AppFoundation */,
 				406A27672C677AAA00460015 /* Network */,
 				40BC69E22C67829D00A319C1 /* Domain */,
+				40BC69E52C67882400A319C1 /* Presentation */,
 			);
 			productName = News;
 			productReference = 406A274F2C67792200460015 /* News.app */;
@@ -414,6 +419,10 @@
 		40BC69E22C67829D00A319C1 /* Domain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Domain;
+		};
+		40BC69E52C67882400A319C1 /* Presentation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Presentation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
