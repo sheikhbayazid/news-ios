@@ -46,7 +46,7 @@ extension NewsNetworkResponse.Article {
             author: author,
             title: title,
             description: description,
-            url: url,
+            urlString: url,
             urlToImage: urlToImage,
             publishedAt: publishedAt,
             content: content

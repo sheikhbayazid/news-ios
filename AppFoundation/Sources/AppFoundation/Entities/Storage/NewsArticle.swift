@@ -16,8 +16,8 @@ public class NewsArticle {
     public let title: String
     public let descriptions: String
 
-    public let url: String
-    public let urlToImage: String?
+    public let url: URL?
+    public let urlToImage: URL?
 
     public let publishedAt: Date?
     public let content: String
@@ -27,7 +27,7 @@ public class NewsArticle {
         author: String?,
         title: String,
         description: String,
-        url: String,
+        urlString: String,
         urlToImage: String?,
         publishedAt: Date?,
         content: String
@@ -36,8 +36,15 @@ public class NewsArticle {
         self.author = author
         self.title = title
         self.descriptions = description
-        self.url = url
-        self.urlToImage = urlToImage
+
+        if let url = URL(string: urlString) {
+            self.url = url
+        }
+
+        if let urlToImage {
+            self.urlToImage = URL(string: urlToImage) ?? nil
+        }
+
         self.publishedAt = publishedAt
         self.content = content
     }
