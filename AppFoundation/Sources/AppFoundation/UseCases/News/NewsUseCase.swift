@@ -9,5 +9,15 @@ import Foundation
 
 public protocol NewsUseCase {
     /// Gets all the news articles or throws an error.
-    func getAllNewsArticles() async throws -> [NewsArticle]
+    /// - Parameter forceRefresh: Whether it should refresh the data from the backend.
+    func getAllNewsArticles(forceRefresh: Bool) async throws -> [NewsArticle]
+}
+
+public extension NewsUseCase {
+    /// Gets all the news articles or throws an error.
+    ///
+    /// If there is data presents, returns the data otherwise refreshes the data from the backend.
+    func getAllNewsArticles() async throws -> [NewsArticle] {
+        try await getAllNewsArticles(forceRefresh: false)
+    }
 }

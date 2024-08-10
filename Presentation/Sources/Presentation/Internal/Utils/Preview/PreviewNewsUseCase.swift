@@ -9,7 +9,7 @@
 import AppFoundation
 
 final class PreviewNewsUseCase: NewsUseCase {
-    func getAllNewsArticles() async throws -> [NewsArticle] {
+    func getAllNewsArticles(forceRefresh: Bool) async throws -> [NewsArticle] {
         [.preview1, .preview2]
     }
 }

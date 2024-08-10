@@ -16,7 +16,6 @@ struct CustomAsyncImage: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .clipShape(.rect(cornerRadius: 12))
             } else if phase.error != nil {
                 Image(systemName: "questionmark.diamond")
                     .imageScale(.large)

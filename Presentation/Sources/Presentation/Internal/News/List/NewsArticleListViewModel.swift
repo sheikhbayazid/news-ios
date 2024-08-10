@@ -43,7 +43,7 @@ final class NewsArticleListViewModel: ObservableObject {
 
     func refreshArticles() async {
         do {
-            let articles = try await newsUseCase.getAllNewsArticles()
+            let articles = try await newsUseCase.getAllNewsArticles(forceRefresh: true)
 
             DispatchQueue.main.async {
                 if articles.isEmpty {
