@@ -41,9 +41,18 @@ public final class DefaultNewsUseCase: NewsUseCase {
         // Some articles are removed and doesn't have content, so filtering
         // the articles so that it doesn't include any removed articles.
         let removedArticleTitle = "[Removed]"
-        let articles = response.articles.filter {
-            $0.title != removedArticleTitle
-        }
+
+        let articles = response.articles
+            .filter {
+                $0.title != removedArticleTitle
+            }
+            .sorted {
+                guard let lhsPublishedDate = $0.publishedAt, let rhsPublishedData = $1.publishedAt else {
+                    return true
+                }
+                return lhsPublishedDate > rhsPublishedData
+            }
+
         cache = articles
         return articles
     }
