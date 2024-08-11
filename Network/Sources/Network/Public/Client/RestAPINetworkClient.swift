@@ -7,12 +7,15 @@
 
 import AppFoundation
 import Foundation
+import OSLog
 
 public final class RestAPINetworkClient: NetworkClient {
     private lazy var decoder = getJSONDecoder()
 
     private let session: URLSessionProtocol
     private let endpoint: RestAPIEndpoint
+
+    private let logger = Logger(subsystem: "News", category: "Network")
 
     /// For testing purpose only.
     init(
@@ -76,11 +79,13 @@ public final class RestAPINetworkClient: NetworkClient {
         request.allHTTPHeaderFields = allHTTPHeaderFields
 
         let (data, response) = try await session.dataCompatible(for: request)
-        return try handleResponse(for: path, data: data, response: response, httpMethod: method)
+        return try handleResponse(data: data, response: response, httpMethod: method)
     }
 
     /// Handle the response from the request. Returns the data only when the status code is 200 otherwise, throws an error.
-    private func handleResponse(for path: String, data: Data, response: URLResponse, httpMethod: HTTPMethod) throws -> Data {
+    private func handleResponse(data: Data, response: URLResponse, httpMethod: HTTPMethod) throws -> Data {
+        logNetworkResponse(response, data: data, httpMethod: httpMethod)
+
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkClientError.dataMissing
         }
@@ -89,8 +94,20 @@ public final class RestAPINetworkClient: NetworkClient {
             return data
         }
 
+        if let error = getResponseError(from: data) {
+            throw error
+        }
+
         let errorAsString = String(data: data, encoding: .utf8) ?? ""
-        throw NetworkClientError.networkError(errorAsString)
+        throw NetworkClientError.networkError(message: errorAsString)
+    }
+
+    /// Parse error response and returns an optional NetworkClientError.
+    private func getResponseError(from data: Data) -> NetworkClientError? {
+        guard let errorResponse = try? decoder.decode(ErrorResponse.self, from: data) else {
+            return nil
+        }
+        return NetworkClientError.networkError(message: errorResponse.message)
     }
 
     /// JSON decoder that decodes the date in proper format.
@@ -98,6 +115,25 @@ public final class RestAPINetworkClient: NetworkClient {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .defaultDateDecodingStrategy
         return decoder
+    }
+
+    /// Logs network response and data to OS logger.
+    func logNetworkResponse(_ response: URLResponse, data: Data, httpMethod: HTTPMethod) {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            logger.log("Data: \(response)")
+            logger.log("HTTP Response: \(response)")
+            return
+        }
+
+        var logMessage = "Incoming API response: HTTPResponse details:\n"
+        logMessage += "\tStatus Code: \(httpResponse.statusCode)\n"
+
+        if let url = httpResponse.url {
+            logMessage += "\tEndpoint: \(url.absoluteString)\n"
+        }
+
+        logMessage += data.loggableMessage
+        logger.log("\(logMessage)")
     }
 }
 
@@ -170,5 +206,20 @@ private extension Dictionary {
     /// Adds elements to the dictionary.
     mutating func add(elements: [Key: Value]) {
         merge(elements, uniquingKeysWith: { first, _ in first })
+    }
+}
+
+private extension Data {
+    /// Loggable string representation of data.
+    var loggableMessage: String {
+        if let jsonObject = try? JSONSerialization.jsonObject(with: self, options: []),
+           let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            return "\tBody: \(jsonString)\n"
+        } else if let dataString = String(data: self, encoding: .utf8) {
+            return "\tBody: \(dataString)\n"
+        } else {
+            return "\tBody: (non-UTF8 data)\n"
+        }
     }
 }

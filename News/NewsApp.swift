@@ -5,16 +5,20 @@
 //  Created by Sheikh Bayazid on 2024-08-10.
 //
 
+import AppFoundation
+import Domain
+import Network
+import Presentation
 import SwiftData
 import SwiftUI
 
 @main
 struct NewsApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    private let newsUseCase: NewsUseCase
+
+    private var sharedModelContainer: ModelContainer = {
+        let schema = Schema([NewsArticle.self])
+        let modelConfiguration = ModelConfiguration(schema: schema)
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -23,9 +27,31 @@ struct NewsApp: App {
         }
     }()
 
+    init() {
+        let apiBaseURL = "https://newsapi.org"
+        let apiVersion = "v2"
+
+        // Replace the string with actual API Key.
+        var apiKey = "YOUR_API_KEY"
+
+        let apiKeyConfigValue: String? = try? Configuration.value(for: "API_KEY")
+        if let apiKeyConfigValue, !apiKeyConfigValue.isEmpty {
+            apiKey = apiKeyConfigValue
+        }
+
+        let networkClient = RestAPINetworkClient(
+            endpoint: .init(
+                baseURL: apiBaseURL,
+                version: apiVersion,
+                apiKey: apiKey
+            )
+        )
+        newsUseCase = DefaultNewsUseCase(networkClient: networkClient)
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView(newsUseCase: newsUseCase)
         }
         .modelContainer(sharedModelContainer)
     }
