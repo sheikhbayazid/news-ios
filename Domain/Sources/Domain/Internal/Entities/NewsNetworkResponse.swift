@@ -14,28 +14,9 @@ struct NewsNetworkResponse: Codable {
     let status: String
     let totalResults: Int
     let articles: [Article]
-
-    struct Article: Codable {
-        let source: Source
-        let author: String?
-
-        let title: String
-        let description: String
-
-        let url: String
-        let urlToImage: String?
-
-        let publishedAt: Date?
-        public let content: String
-
-        struct Source: Codable {
-            let id: String?
-            let name: String
-        }
-    }
 }
 
-extension NewsNetworkResponse.Article {
+extension Article {
     /// Maps news response article data to news article object.
     var newsArticle: NewsArticle {
         .init(
