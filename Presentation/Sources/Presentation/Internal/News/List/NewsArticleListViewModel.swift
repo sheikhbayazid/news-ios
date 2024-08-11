@@ -13,8 +13,7 @@ import SwiftData
 final class NewsArticleListViewModel: ObservableObject {
     private let newsUseCase: NewsUseCase
 
-    @Published var articles = [Article]()
-
+    @Published private(set) var articles = [Article]()
     @Published private(set) var isLoading = false
     @Published private(set) var emptyState: EmptyStateType?
 
