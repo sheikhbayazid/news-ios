@@ -6,13 +6,14 @@
 //
 
 import AppFoundation
+import Foundation
 import SwiftData
 
 @ModelActor
 final actor BackgroundStorage {
-    func save(articles: [Article]) {
-        guard !articles.isEmpty else {
-            // Not updating when the values are empty.
+    func save(newArticles: [Article], storedArticles: [NewsArticle]) {
+        guard !newArticles.isEmpty, newArticles != storedArticles.map(\.article)  else {
+            // Not updating when the values are empty and similar to stored values.
             return
         }
 
@@ -21,11 +22,10 @@ final actor BackgroundStorage {
             try modelContext.delete(model: NewsArticle.self)
 
             // Save new data
-            let newsArticles = articles.map(\.newsArticle)
+            let newsArticles = newArticles.map(\.newsArticle)
             newsArticles.forEach {
                 modelContext.insert($0)
             }
-            try modelContext.save()
         } catch {
             debugPrint(error)
         }

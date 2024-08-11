@@ -16,14 +16,9 @@ final class CustomAsyncImageViewModel: ObservableObject {
     private static let cache = ImageCache()
 
     private let url: URL
-    private let onDownloadFinish: (Data) -> Void
 
-    init(
-        url: URL,
-        onDownloadFinish: @escaping (Data) -> Void
-    ) {
+    init(url: URL) {
         self.url = url
-        self.onDownloadFinish = onDownloadFinish
     }
 
     func downloadImage() async {
@@ -42,7 +37,6 @@ final class CustomAsyncImageViewModel: ObservableObject {
             if let downloadedImage = UIImage(data: data) {
                 // Cache the downloaded image
                 Self.cache.setImage(downloadedImage, forKey: url)
-                self.onDownloadFinish(data)
 
                 withAnimation(.snappy) {
                     self.image = downloadedImage

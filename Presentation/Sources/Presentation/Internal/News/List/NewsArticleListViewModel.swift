@@ -45,6 +45,12 @@ final class NewsArticleListViewModel: ObservableObject {
         }
     }
 
+    /// Saves the data to the device storage.
+    func saveArticlesToStorage(context: ModelContext, storedArticles: [NewsArticle]) async {
+        let storage = BackgroundStorage(modelContainer: context.container)
+        await storage.save(newArticles: articles, storedArticles: storedArticles)
+    }
+
     /// Fetches the all the articles. Fetches the articles from the backend if there is no data available otherwise returns the fetched data.
     private func getAllNewsArticles(storedArticles: [NewsArticle]) async {
         isLoading = true
@@ -65,12 +71,6 @@ final class NewsArticleListViewModel: ObservableObject {
         isLoading = false
     }
 
-    /// Saves the data to the device storage.
-    func saveArticlesToStorage(context: ModelContext) async {
-        let storage = BackgroundStorage(modelContainer: context.container)
-        await storage.save(articles: articles)
-    }
-
     /// Handles the network error. If there are stored data then stored data is shown otherwise, shows error state
     private func handleNetworkError(with storedArticles: [NewsArticle], error: Error) {
         if storedArticles.isEmpty {
@@ -81,7 +81,7 @@ final class NewsArticleListViewModel: ObservableObject {
     }
 }
 
-private extension NewsArticle {
+extension NewsArticle {
     var article: Article {
         .init(
             source: .init(

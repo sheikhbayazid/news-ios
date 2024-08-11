@@ -17,10 +17,8 @@ struct NewsApp: App {
     private let newsUseCase: NewsUseCase
 
     private var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            NewsArticle.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let schema = Schema([NewsArticle.self])
+        let modelConfiguration = ModelConfiguration(schema: schema)
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])

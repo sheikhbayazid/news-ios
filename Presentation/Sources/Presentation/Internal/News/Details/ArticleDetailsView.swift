@@ -9,7 +9,9 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleDetailsView: View {
-    @Binding var article: Article
+    @Environment(\.modelContext) private var modelContext
+
+    let article: Article
 
     var body: some View {
         container()
@@ -22,7 +24,8 @@ struct ArticleDetailsView: View {
     private func container() -> some View {
         ScrollView {
             VStack(spacing: 20) {
-                ArticleImageView(article: $article)
+                ArticleImageView(article: article)
+
                 content()
             }
             .padding(.vertical)
@@ -83,6 +86,6 @@ struct ArticleDetailsView: View {
 
 #Preview {
     NavigationStack {
-        ArticleDetailsView(article: .constant(.preview1))
+        ArticleDetailsView(article: .preview1)
     }
 }

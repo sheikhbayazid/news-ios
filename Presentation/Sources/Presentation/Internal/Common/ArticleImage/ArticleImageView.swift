@@ -9,7 +9,7 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleImageView: View {
-    @Binding var article: Article
+    let article: Article
 
     var body: some View {
         if let imageData = article.imageData, let uiImage = UIImage(data: imageData) {
@@ -17,18 +17,11 @@ struct ArticleImageView: View {
                 .resizable()
                 .scaledToFit()
         } else if let urlToImageString = article.urlToImage, let urlToImage = URL(string: urlToImageString) {
-            CustomAsyncImage(
-                url: urlToImage,
-                onDownloadFinish: onDownloadFinish
-            )
+            CustomAsyncImage(url: urlToImage)
         }
-    }
-
-    private func onDownloadFinish(data: Data) {
-        article.imageData = data
     }
 }
 
 #Preview {
-    ArticleImageView(article: .constant(.preview1))
+    ArticleImageView(article: .preview1)
 }

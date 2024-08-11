@@ -11,7 +11,9 @@ import SwiftUI
 
 struct NewsArticleListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var storedArticles: [NewsArticle]
+
+    @Query(sort: \NewsArticle.publishedAt, order: .reverse)
+    private var storedArticles: [NewsArticle]
 
     @StateObject private var viewModel: NewsArticleListViewModel
 
@@ -30,7 +32,10 @@ struct NewsArticleListView: View {
             )
         }
         .task(id: viewModel.articles, priority: .background) {
-            await viewModel.saveArticlesToStorage(context: modelContext)
+            await viewModel.saveArticlesToStorage(
+                context: modelContext,
+                storedArticles: storedArticles
+            )
         }
         .refreshable {
             await viewModel.refreshArticles(
@@ -55,12 +60,12 @@ struct NewsArticleListView: View {
     @ViewBuilder
     private func content() -> some View {
         ForEach(viewModel.articles.indices, id: \.self) { index in
-            let articleBinding = $viewModel.articles[index]
+            let article = viewModel.articles[index]
 
             NavigationLink {
-                ArticleDetailsView(article: articleBinding)
+                ArticleDetailsView(article: article)
             } label: {
-                ArticlePreviewView(article: articleBinding)
+                ArticlePreviewView(article: article)
             }
         }
     }
