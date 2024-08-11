@@ -15,7 +15,7 @@ final class NetworkClientTests: XCTestCase {
     private var sut: NetworkClient!
 
     override func setUp() {
-        session = MockedURLSession()
+        session = .init()
         sut = RestAPINetworkClient(
             endpoint: .init(
                 baseURL: "test",

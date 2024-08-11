@@ -29,7 +29,7 @@ final class NewsUseCaseTests: XCTestCase {
         context = ModelContext(container)
 
         networkClient = .init()
-        sut = DefaultNewsUseCase(networkClient: networkClient)
+        sut = .init(networkClient: networkClient)
     }
 
     override func tearDown() {
