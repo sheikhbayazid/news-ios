@@ -17,10 +17,8 @@ struct ArticlePreviewView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            if let urlToImage = article.urlToImage {
-                CustomAsyncImage(url: urlToImage, onDownloadFinish: { _ in })
-                    .clipShape(.rect(cornerRadius: 10))
-            }
+            ArticleImageView(article: article)
+                .clipShape(.rect(cornerRadius: 10))
 
             ArticleSummeryView(article: article)
         }

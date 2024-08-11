@@ -19,6 +19,9 @@ public class NewsArticle {
     public let url: URL?
     public let urlToImage: URL?
 
+    @Attribute(.externalStorage)
+    public var imageData: Data?
+
     public let publishedAt: Date?
     public let content: String
 

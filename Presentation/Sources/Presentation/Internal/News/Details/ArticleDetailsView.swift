@@ -9,7 +9,7 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleDetailsView: View {
-    let article: NewsArticle
+    var article: NewsArticle
 
     var body: some View {
         container()
@@ -22,17 +22,10 @@ struct ArticleDetailsView: View {
     private func container() -> some View {
         ScrollView {
             VStack(spacing: 20) {
-                image()
+                ArticleImageView(article: article)
                 content()
             }
             .padding(.vertical)
-        }
-    }
-
-    @ViewBuilder
-    private func image() -> some View {
-        if let urlToImage = article.urlToImage {
-            CustomAsyncImage(url: urlToImage, onDownloadFinish: { _ in })
         }
     }
 
