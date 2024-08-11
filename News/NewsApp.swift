@@ -30,12 +30,19 @@ struct NewsApp: App {
     }()
 
     init() {
-        let apiKey: String? = try? Configuration.value(for: "API_KEY")
+        // Replace the string with actual API Key.
+        var apiKey = "YOUR_API_KEY"
+
+        let apiKeyConfigValue: String? = try? Configuration.value(for: "API_KEY")
+        if let apiKeyConfigValue, !apiKeyConfigValue.isEmpty {
+            apiKey = apiKeyConfigValue
+        }
+
         let networkClient = RestAPINetworkClient(
             endpoint: .init(
                 baseURL: "https://newsapi.org",
                 version: "v2",
-                apiKey: apiKey ?? "YOUR_API_KEY"
+                apiKey: apiKey
             )
         )
         newsUseCase = DefaultNewsUseCase(networkClient: networkClient)
