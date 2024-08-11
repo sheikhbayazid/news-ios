@@ -25,14 +25,19 @@ struct NewsArticleListView: View {
         }
         .task {
             await viewModel.getAllNewsArticles(
-                context: modelContext,
                 storedArticles: storedArticles
             )
         }
         .refreshable {
             await viewModel.refreshArticles(
-                context: modelContext,
                 storedArticles: storedArticles
+            )
+        }
+        .onChange(of: viewModel.articles) { oldArticles, newArticles in
+            viewModel.saveArticlesToStorage(
+                context: modelContext,
+                oldArticles: oldArticles,
+                newArticles: newArticles
             )
         }
         .navigationTitle("News")

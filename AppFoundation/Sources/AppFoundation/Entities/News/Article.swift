@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Article: Codable {
+public struct Article: Codable, Equatable {
     public let source: Source
     public let author: String?
 
@@ -43,7 +43,7 @@ public struct Article: Codable {
         self.content = content
     }
 
-    public struct Source: Codable {
+    public struct Source: Codable, Equatable {
         public let id: String?
         public let name: String
 

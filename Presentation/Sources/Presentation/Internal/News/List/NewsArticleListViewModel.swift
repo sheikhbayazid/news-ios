@@ -22,7 +22,8 @@ final class NewsArticleListViewModel: ObservableObject {
         self.newsUseCase = newsUseCase
     }
 
-    func getAllNewsArticles(context: ModelContext, storedArticles: [NewsArticle]) async {
+    /// Fetches the all the articles. Fetches the articles from the backend if there is no data available otherwise returns the fetched data.
+    func getAllNewsArticles(storedArticles: [NewsArticle]) async {
         isLoading = true
 
         do {
@@ -33,8 +34,6 @@ final class NewsArticleListViewModel: ObservableObject {
             } else {
                 self.articles = articles
                 self.emptyState = nil
-
-                saveArticlesToStorage(context: context, articles: articles)
             }
         } catch {
             handleNetworkError(with: storedArticles, error: error)
@@ -43,7 +42,8 @@ final class NewsArticleListViewModel: ObservableObject {
         isLoading = false
     }
 
-    func refreshArticles(context: ModelContext, storedArticles: [NewsArticle]) async {
+    /// Refreshes all the articles from the backend.
+    func refreshArticles(storedArticles: [NewsArticle]) async {
         do {
             let articles = try await newsUseCase.getAllNewsArticles(forceRefresh: true)
 
@@ -52,11 +52,29 @@ final class NewsArticleListViewModel: ObservableObject {
             } else {
                 self.articles = articles
                 self.emptyState = nil
-
-                self.saveArticlesToStorage(context: context, articles: articles)
             }
         } catch {
             self.handleNetworkError(with: storedArticles, error: error)
+        }
+    }
+
+    /// Saves the data to the device storage.
+    func saveArticlesToStorage(context: ModelContext, oldArticles: [Article], newArticles: [Article]) {
+        guard !newArticles.isEmpty else {
+            return
+        }
+
+        do {
+            // Remove existing stored data
+            try context.delete(model: NewsArticle.self)
+
+            // Save new data
+            let newsArticles = newArticles.map(\.newsArticle)
+            newsArticles.forEach {
+                context.insert($0)
+            }
+        } catch {
+            debugPrint(error)
         }
     }
 
@@ -68,26 +86,7 @@ final class NewsArticleListViewModel: ObservableObject {
             articles = storedArticles.map(\.article)
         }
     }
-
-    /// Saves the data to the device storage.
-    private func saveArticlesToStorage(context: ModelContext, articles: [Article]) {
-        do {
-            // Remove existing stored data
-            try context.delete(model: NewsArticle.self)
-
-            // Save new data
-            let newsArticles = articles.map(\.newsArticle)
-            newsArticles.forEach {
-                context.insert($0)
-            }
-        } catch {
-            debugPrint(error)
-        }
-    }
 }
-
-// Removes warning for the sendable conformance.
-extension ModelContext: @unchecked Sendable { }
 
 private extension Article {
     /// Maps news response article data to news article object.
