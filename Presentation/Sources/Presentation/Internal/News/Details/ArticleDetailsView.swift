@@ -32,7 +32,7 @@ struct ArticleDetailsView: View {
     @ViewBuilder
     private func image() -> some View {
         if let urlToImage = article.urlToImage {
-            CustomAsyncImage(url: urlToImage)
+            CustomAsyncImage(url: urlToImage, onDownloadFinish: { _ in })
         }
     }
 
