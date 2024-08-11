@@ -9,7 +9,7 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleDetailsView: View {
-    var article: Article
+    @Binding var article: Article
 
     var body: some View {
         container()
@@ -22,7 +22,7 @@ struct ArticleDetailsView: View {
     private func container() -> some View {
         ScrollView {
             VStack(spacing: 20) {
-                ArticleImageView(article: article)
+                ArticleImageView(article: $article)
                 content()
             }
             .padding(.vertical)
@@ -83,6 +83,6 @@ struct ArticleDetailsView: View {
 
 #Preview {
     NavigationStack {
-        ArticleDetailsView(article: .preview1)
+        ArticleDetailsView(article: .constant(.preview1))
     }
 }

@@ -1,6 +1,6 @@
 //
 //  NewsArticleListView.swift
-//
+//  Presentation
 //
 //  Created by Sheikh Bayazid on 2024-08-10.
 //
@@ -24,20 +24,17 @@ struct NewsArticleListView: View {
             container()
         }
         .task {
-            await viewModel.getAllNewsArticles(
+            await viewModel.handleOnAppear(
+                context: modelContext,
                 storedArticles: storedArticles
             )
+        }
+        .task(id: viewModel.articles, priority: .background) {
+            await viewModel.saveArticlesToStorage(context: modelContext)
         }
         .refreshable {
             await viewModel.refreshArticles(
                 storedArticles: storedArticles
-            )
-        }
-        .onChange(of: viewModel.articles) { oldArticles, newArticles in
-            viewModel.saveArticlesToStorage(
-                context: modelContext,
-                oldArticles: oldArticles,
-                newArticles: newArticles
             )
         }
         .navigationTitle("News")
@@ -57,13 +54,13 @@ struct NewsArticleListView: View {
 
     @ViewBuilder
     private func content() -> some View {
-        ForEach(0..<viewModel.articles.indices.count, id: \.self) { index in
-            let article = viewModel.articles[index]
+        ForEach(viewModel.articles.indices, id: \.self) { index in
+            let articleBinding = $viewModel.articles[index]
 
             NavigationLink {
-                ArticleDetailsView(article: article)
+                ArticleDetailsView(article: articleBinding)
             } label: {
-                ArticlePreviewView(article: article)
+                ArticlePreviewView(article: articleBinding)
             }
         }
     }

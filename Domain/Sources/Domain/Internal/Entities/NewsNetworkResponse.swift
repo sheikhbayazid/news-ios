@@ -1,4 +1,3 @@
-//  swiftlint:disable nesting
 //
 //  NewsNetworkResponse.swift
 //  Domain

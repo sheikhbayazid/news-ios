@@ -12,8 +12,9 @@ import SwiftData
 @MainActor
 final class NewsArticleListViewModel: ObservableObject {
     private let newsUseCase: NewsUseCase
+    private var context: ModelContext?
 
-    @Published private(set) var articles = [Article]()
+    @Published var articles = [Article]()
 
     @Published private(set) var isLoading = false
     @Published private(set) var emptyState: EmptyStateType?
@@ -22,24 +23,10 @@ final class NewsArticleListViewModel: ObservableObject {
         self.newsUseCase = newsUseCase
     }
 
-    /// Fetches the all the articles. Fetches the articles from the backend if there is no data available otherwise returns the fetched data.
-    func getAllNewsArticles(storedArticles: [NewsArticle]) async {
-        isLoading = true
+    func handleOnAppear(context: ModelContext, storedArticles: [NewsArticle]) async {
+        self.context = context
 
-        do {
-            let articles = try await newsUseCase.getAllNewsArticles()
-
-            if articles.isEmpty {
-                emptyState = .noData
-            } else {
-                self.articles = articles
-                self.emptyState = nil
-            }
-        } catch {
-            handleNetworkError(with: storedArticles, error: error)
-        }
-
-        isLoading = false
+        await getAllNewsArticles(storedArticles: storedArticles)
     }
 
     /// Refreshes all the articles from the backend.
@@ -58,24 +45,30 @@ final class NewsArticleListViewModel: ObservableObject {
         }
     }
 
-    /// Saves the data to the device storage.
-    func saveArticlesToStorage(context: ModelContext, oldArticles: [Article], newArticles: [Article]) {
-        guard !newArticles.isEmpty else {
-            return
-        }
+    /// Fetches the all the articles. Fetches the articles from the backend if there is no data available otherwise returns the fetched data.
+    private func getAllNewsArticles(storedArticles: [NewsArticle]) async {
+        isLoading = true
 
         do {
-            // Remove existing stored data
-            try context.delete(model: NewsArticle.self)
+            let articles = try await newsUseCase.getAllNewsArticles()
 
-            // Save new data
-            let newsArticles = newArticles.map(\.newsArticle)
-            newsArticles.forEach {
-                context.insert($0)
+            if articles.isEmpty {
+                emptyState = .noData
+            } else {
+                self.articles = articles
+                self.emptyState = nil
             }
         } catch {
-            debugPrint(error)
+            handleNetworkError(with: storedArticles, error: error)
         }
+
+        isLoading = false
+    }
+
+    /// Saves the data to the device storage.
+    func saveArticlesToStorage(context: ModelContext) async {
+        let storage = BackgroundStorage(modelContainer: context.container)
+        await storage.save(articles: articles)
     }
 
     /// Handles the network error. If there are stored data then stored data is shown otherwise, shows error state
@@ -85,25 +78,6 @@ final class NewsArticleListViewModel: ObservableObject {
         } else if articles.isEmpty {
             articles = storedArticles.map(\.article)
         }
-    }
-}
-
-private extension Article {
-    /// Maps news response article data to news article object.
-    var newsArticle: NewsArticle {
-        .init(
-            source: .init(
-                id: source.id,
-                name: source.name
-            ),
-            author: author,
-            title: title,
-            description: description,
-            urlString: url,
-            urlToImage: urlToImage,
-            publishedAt: publishedAt,
-            content: content
-        )
     }
 }
 

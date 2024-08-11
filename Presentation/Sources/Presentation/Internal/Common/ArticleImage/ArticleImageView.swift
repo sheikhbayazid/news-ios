@@ -9,7 +9,7 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleImageView: View {
-    var article: Article
+    @Binding var article: Article
 
     var body: some View {
         if let imageData = article.imageData, let uiImage = UIImage(data: imageData) {
@@ -25,11 +25,10 @@ struct ArticleImageView: View {
     }
 
     private func onDownloadFinish(data: Data) {
-//        article.imageData = data
-        #warning("Fix me")
+        article.imageData = data
     }
 }
 
 #Preview {
-    ArticleImageView(article: .preview1)
+    ArticleImageView(article: .constant(.preview1))
 }

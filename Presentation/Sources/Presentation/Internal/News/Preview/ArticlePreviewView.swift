@@ -9,15 +9,11 @@ import AppFoundation
 import SwiftUI
 
 struct ArticlePreviewView: View {
-    var article: Article
-
-    init(article: Article) {
-        self.article = article
-    }
+    @Binding var article: Article
 
     var body: some View {
         VStack(spacing: 8) {
-            ArticleImageView(article: article)
+            ArticleImageView(article: $article)
                 .clipShape(.rect(cornerRadius: 10))
 
             ArticleSummeryView(article: article)
@@ -49,5 +45,5 @@ private struct ArticleSummeryView: View {
 }
 
 #Preview {
-    ArticlePreviewView(article: .preview1)
+    ArticlePreviewView(article: .constant(.preview1))
 }
