@@ -23,7 +23,7 @@ struct CustomAsyncImage: View {
     }
 
     var body: some View {
-        Group {
+        ZStack {
             if viewModel.isLoading {
                 ProgressView()
             } else if let image = viewModel.image {
@@ -32,10 +32,8 @@ struct CustomAsyncImage: View {
                 errorView(error)
             }
         }
-        .onAppear {
-            Task {
-                await viewModel.downloadImage()
-            }
+        .task {
+            await viewModel.downloadImage()
         }
     }
 

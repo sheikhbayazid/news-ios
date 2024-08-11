@@ -9,6 +9,7 @@ import AppFoundation
 import Foundation
 import SwiftData
 
+@MainActor
 final class NewsArticleListViewModel: ObservableObject {
     private let newsUseCase: NewsUseCase
 
@@ -21,47 +22,41 @@ final class NewsArticleListViewModel: ObservableObject {
         self.newsUseCase = newsUseCase
     }
 
-    func getAllNewsArticles(context: ModelContext, storedArticles: [NewsArticle]) {
+    func getAllNewsArticles(context: ModelContext, storedArticles: [NewsArticle]) async {
         isLoading = true
 
-        Task { @MainActor in
-            do {
-                let articles = try await newsUseCase.getAllNewsArticles()
+        do {
+            let articles = try await newsUseCase.getAllNewsArticles()
 
-                if articles.isEmpty {
-                    emptyState = .noData
-                } else {
-                    self.articles = articles
-                    self.emptyState = nil
+            if articles.isEmpty {
+                emptyState = .noData
+            } else {
+                self.articles = articles
+                self.emptyState = nil
 
-                    saveArticlesToStorage(context: context, articles: articles)
-                }
-            } catch {
-                handleNetworkError(with: storedArticles, error: error)
+                saveArticlesToStorage(context: context, articles: articles)
             }
-
-            isLoading = false
+        } catch {
+            handleNetworkError(with: storedArticles, error: error)
         }
+
+        isLoading = false
     }
 
     func refreshArticles(context: ModelContext, storedArticles: [NewsArticle]) async {
         do {
             let articles = try await newsUseCase.getAllNewsArticles(forceRefresh: true)
 
-            DispatchQueue.main.async {
-                if articles.isEmpty {
-                    self.emptyState = .noData
-                } else {
-                    self.articles = articles
-                    self.emptyState = nil
+            if articles.isEmpty {
+                self.emptyState = .noData
+            } else {
+                self.articles = articles
+                self.emptyState = nil
 
-                    self.saveArticlesToStorage(context: context, articles: articles)
-                }
+                self.saveArticlesToStorage(context: context, articles: articles)
             }
         } catch {
-            DispatchQueue.main.async {
-                self.handleNetworkError(with: storedArticles, error: error)
-            }
+            self.handleNetworkError(with: storedArticles, error: error)
         }
     }
 

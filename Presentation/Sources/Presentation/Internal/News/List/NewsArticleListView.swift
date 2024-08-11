@@ -23,8 +23,8 @@ struct NewsArticleListView: View {
         List {
             container()
         }
-        .onAppear {
-            viewModel.getAllNewsArticles(
+        .task {
+            await viewModel.getAllNewsArticles(
                 context: modelContext,
                 storedArticles: storedArticles
             )
