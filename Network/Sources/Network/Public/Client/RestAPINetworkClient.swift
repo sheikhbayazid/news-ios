@@ -89,8 +89,20 @@ public final class RestAPINetworkClient: NetworkClient {
             return data
         }
 
+        if let error = getResponseError(from: data) {
+            throw error
+        }
+
         let errorAsString = String(data: data, encoding: .utf8) ?? ""
-        throw NetworkClientError.networkError(errorAsString)
+        throw NetworkClientError.networkError(message: errorAsString)
+    }
+
+    /// Parse error response and returns an optional NetworkClientError.
+    private func getResponseError(from data: Data) -> NetworkClientError? {
+        guard let errorResponse = try? decoder.decode(ErrorResponse.self, from: data) else {
+            return nil
+        }
+        return NetworkClientError.networkError(message: errorResponse.message)
     }
 
     /// JSON decoder that decodes the date in proper format.
