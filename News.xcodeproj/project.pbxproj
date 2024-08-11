@@ -12,6 +12,7 @@
 		406A275C2C67792300460015 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 406A275B2C67792300460015 /* Preview Assets.xcassets */; };
 		406A27652C6779DD00460015 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27642C6779DD00460015 /* AppFoundation */; };
 		406A27682C677AAA00460015 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 406A27672C677AAA00460015 /* Network */; };
+		40AFB0532C68D01200D2DC0E /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AFB0522C68D01200D2DC0E /* Configuration.swift */; };
 		40BC69E32C67829D00A319C1 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 40BC69E22C67829D00A319C1 /* Domain */; };
 		40BC69E62C67882400A319C1 /* Presentation in Frameworks */ = {isa = PBXBuildFile; productRef = 40BC69E52C67882400A319C1 /* Presentation */; };
 /* End PBXBuildFile section */
@@ -23,6 +24,9 @@
 		406A275B2C67792300460015 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		406A27622C6779BE00460015 /* AppFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppFoundation; sourceTree = "<group>"; };
 		406A27662C677A9500460015 /* Network */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Network; sourceTree = "<group>"; };
+		40AFB04F2C68CF0400D2DC0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		40AFB0522C68D01200D2DC0E /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		40AFB0542C68D30700D2DC0E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		40BC69E12C67828800A319C1 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
 		40BC69E42C6787E300A319C1 /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Presentation; sourceTree = "<group>"; };
 		40E8D2AD2C677C46002F758A /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
@@ -69,6 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				406A27522C67792200460015 /* NewsApp.swift */,
+				40AFB0542C68D30700D2DC0E /* Config.xcconfig */,
+				40AFB0522C68D01200D2DC0E /* Configuration.swift */,
+				40AFB04F2C68CF0400D2DC0E /* Info.plist */,
 				406A27582C67792300460015 /* Assets.xcassets */,
 				406A275A2C67792300460015 /* Preview Content */,
 			);
@@ -188,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40AFB0532C68D01200D2DC0E /* Configuration.swift in Sources */,
 				406A27532C67792200460015 /* NewsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,6 +334,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = News/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -357,6 +366,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = News/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
