@@ -12,7 +12,6 @@ import SwiftData
 @MainActor
 final class NewsArticleListViewModel: ObservableObject {
     private let newsUseCase: NewsUseCase
-    private var context: ModelContext?
 
     @Published var articles = [Article]()
 
@@ -23,25 +22,21 @@ final class NewsArticleListViewModel: ObservableObject {
         self.newsUseCase = newsUseCase
     }
 
-    func handleOnAppear(context: ModelContext, storedArticles: [NewsArticle]) async {
-        self.context = context
+    /// Returns the already fetched articles if there's any otherwise, makes a call to the backend and returns the data.
+    func getAllNewsArticles(storedArticles: [NewsArticle]) async {
+        isLoading = true
 
-        await getAllNewsArticles(storedArticles: storedArticles)
+        await handleNetworkRequest(storedArticles: storedArticles) {
+            try await newsUseCase.getAllNewsArticles()
+        }
+
+        isLoading = false
     }
 
     /// Refreshes all the articles from the backend.
     func refreshArticles(storedArticles: [NewsArticle]) async {
-        do {
-            let articles = try await newsUseCase.getAllNewsArticles(forceRefresh: true)
-
-            if articles.isEmpty {
-                self.emptyState = .noData
-            } else {
-                self.articles = articles
-                self.emptyState = nil
-            }
-        } catch {
-            self.handleNetworkError(with: storedArticles, error: error)
+        await handleNetworkRequest(storedArticles: storedArticles) {
+            try await newsUseCase.getAllNewsArticles(forceRefresh: true)
         }
     }
 
@@ -51,24 +46,20 @@ final class NewsArticleListViewModel: ObservableObject {
         await storage.save(newArticles: articles, storedArticles: storedArticles)
     }
 
-    /// Fetches the all the articles. Fetches the articles from the backend if there is no data available otherwise returns the fetched data.
-    private func getAllNewsArticles(storedArticles: [NewsArticle]) async {
-        isLoading = true
-
+    /// Handles the network request by making the request, updating the articles, and setting error state if needed.
+    private func handleNetworkRequest(storedArticles: [NewsArticle], request: () async throws -> [Article]) async {
         do {
-            let articles = try await newsUseCase.getAllNewsArticles()
+            let articles = try await request()
 
             if articles.isEmpty {
                 emptyState = .noData
             } else {
                 self.articles = articles
-                self.emptyState = nil
+                emptyState = nil
             }
         } catch {
             handleNetworkError(with: storedArticles, error: error)
         }
-
-        isLoading = false
     }
 
     /// Handles the network error. If there are stored data then stored data is shown otherwise, shows error state
@@ -82,6 +73,7 @@ final class NewsArticleListViewModel: ObservableObject {
 }
 
 extension NewsArticle {
+    /// Maps `NewsArticle` article to `Article` object.
     var article: Article {
         .init(
             source: .init(

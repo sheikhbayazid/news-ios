@@ -6,7 +6,6 @@
 //
 
 import AppFoundation
-import Foundation
 import SwiftData
 
 @ModelActor

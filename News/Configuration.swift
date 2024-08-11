@@ -1,4 +1,5 @@
-// Code from NSHipster: https://nshipster.com/xcconfig/
+/// Code from NSHipster: https://nshipster.com/xcconfig/
+
 import Foundation
 
 enum Configuration {

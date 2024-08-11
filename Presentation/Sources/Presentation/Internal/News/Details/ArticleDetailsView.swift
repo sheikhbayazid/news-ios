@@ -14,22 +14,21 @@ struct ArticleDetailsView: View {
     let article: Article
 
     var body: some View {
-        container()
-            .navigationTitle(article.source.name)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(content: toolBarContent)
+        ScrollView {
+            container()
+        }
+        .navigationTitle(article.source.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(content: toolBarContent)
     }
 
     @ViewBuilder
     private func container() -> some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                ArticleImageView(article: article)
-
-                content()
-            }
-            .padding(.vertical)
+        VStack(spacing: 20) {
+            ArticleImageView(article: article)
+            content()
         }
+        .padding(.vertical)
     }
 
     @ViewBuilder

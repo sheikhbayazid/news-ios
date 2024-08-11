@@ -18,7 +18,7 @@ struct ArticleImageView: View {
                 .scaledToFit()
         } else if let urlToImageString = article.urlToImage, let urlToImage = URL(string: urlToImageString) {
             CustomAsyncImage(url: urlToImage)
-        }
+        } // Image URL is optional so doesn't need to handle `else`
     }
 }
 

@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension Text {
+    /// Creates a text view that displays markdowns.
     init(markdown: String) {
         self.init(LocalizedStringKey(markdown))
     }

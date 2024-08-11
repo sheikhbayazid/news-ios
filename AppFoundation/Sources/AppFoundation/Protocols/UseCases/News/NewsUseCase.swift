@@ -16,7 +16,7 @@ public protocol NewsUseCase {
 public extension NewsUseCase {
     /// Gets all the news articles or throws an error.
     ///
-    /// If there is data presents, returns the data otherwise refreshes the data from the backend.
+    /// - Note: If the data is already fetched, returns the fetched data otherwise refreshes the data from the backend.
     func getAllNewsArticles() async throws -> [Article] {
         try await getAllNewsArticles(forceRefresh: false)
     }

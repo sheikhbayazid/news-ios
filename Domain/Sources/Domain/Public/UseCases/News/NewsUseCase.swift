@@ -31,15 +31,15 @@ public final class DefaultNewsUseCase: NewsUseCase {
         }
     }
 
-    /// Makes a call to the backend and returns the data.
+    /// Makes a call to the backend and returns the news article data.
     private func refreshAllNewsArticles() async throws -> [Article] {
         let response = try await networkClient.get(
             path: "everything?q=apple",
             type: NewsNetworkResponse.self
         )
 
-        // Some articles are removed and doesn't have content, so filtering
-        // the articles so that it doesn't include any removed articles.
+        // Some articles are removed (marked with "[Removed]") and doesn't have content, 
+        // so filtering the articles so that the removed articles won't be returned.
         let removedArticleTitle = "[Removed]"
 
         let articles = response.articles

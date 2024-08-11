@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// News article model that is used to fetch the data from the backend.
 public struct Article: Codable, Equatable {
     public let source: Source
     public let author: String?

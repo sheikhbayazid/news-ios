@@ -8,6 +8,7 @@
 
 import AppFoundation
 
+/// Mocked `NewsUseCase` for the previews.
 final class PreviewNewsUseCase: NewsUseCase {
     func getAllNewsArticles(forceRefresh: Bool) async throws -> [Article] {
         [.preview1, .preview2]

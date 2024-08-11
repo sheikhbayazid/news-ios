@@ -28,6 +28,9 @@ struct NewsApp: App {
     }()
 
     init() {
+        let apiBaseURL = "https://newsapi.org"
+        let apiVersion = "v2"
+
         // Replace the string with actual API Key.
         var apiKey = "YOUR_API_KEY"
 
@@ -38,8 +41,8 @@ struct NewsApp: App {
 
         let networkClient = RestAPINetworkClient(
             endpoint: .init(
-                baseURL: "https://newsapi.org",
-                version: "v2",
+                baseURL: apiBaseURL,
+                version: apiVersion,
                 apiKey: apiKey
             )
         )

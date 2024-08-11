@@ -22,7 +22,9 @@ struct EmptyStateView: View {
             Text(description)
         }
     }
+}
 
+private extension EmptyStateView {
     var labelTitle: String {
         switch type {
         case .noData:

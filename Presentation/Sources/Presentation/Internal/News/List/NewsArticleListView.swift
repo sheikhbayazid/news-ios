@@ -26,12 +26,13 @@ struct NewsArticleListView: View {
             container()
         }
         .task {
-            await viewModel.handleOnAppear(
-                context: modelContext,
+            await viewModel.getAllNewsArticles(
                 storedArticles: storedArticles
             )
         }
         .task(id: viewModel.articles, priority: .background) {
+            // Saving articles to the storage in the background thread so that it doesn't affect
+            // performance since there is a large number of articles fetched from the network.
             await viewModel.saveArticlesToStorage(
                 context: modelContext,
                 storedArticles: storedArticles

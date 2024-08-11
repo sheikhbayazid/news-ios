@@ -11,9 +11,7 @@ struct CustomAsyncImage: View {
     @StateObject private var viewModel: CustomAsyncImageViewModel
 
     init(url: URL) {
-        _viewModel = .init(
-            wrappedValue: .init(url: url)
-        )
+        _viewModel = .init(wrappedValue: .init(url: url))
     }
 
     var body: some View {
@@ -40,9 +38,14 @@ struct CustomAsyncImage: View {
 
     @ViewBuilder
     private func errorView(_ error: Error) -> some View {
-        Text(error.localizedDescription)
-            .font(.caption)
-            .foregroundStyle(.red)
+        VStack(spacing: 8) {
+            Image(systemName: "photo")
+                .font(.headline)
+
+            Text(error.localizedDescription)
+                .font(.caption)
+                .foregroundStyle(.red)
+        }
     }
 }
 

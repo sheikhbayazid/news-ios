@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+// News article model that is used to store the article data to the device.
 @Model
 public class NewsArticle {
     public let source: Source

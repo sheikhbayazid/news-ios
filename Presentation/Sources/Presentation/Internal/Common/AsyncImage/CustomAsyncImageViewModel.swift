@@ -9,11 +9,11 @@ import SwiftUI
 
 @MainActor
 final class CustomAsyncImageViewModel: ObservableObject {
+    private static let cache = ImageCache()
+
     @Published private(set) var image: UIImage?
     @Published private(set) var isLoading = false
     @Published private(set) var error: Error?
-
-    private static let cache = ImageCache()
 
     private let url: URL
 
