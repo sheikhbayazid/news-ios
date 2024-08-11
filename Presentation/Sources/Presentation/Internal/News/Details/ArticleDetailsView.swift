@@ -15,6 +15,7 @@ struct ArticleDetailsView: View {
         container()
             .navigationTitle(article.source.name)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(content: toolBarContent)
     }
 
     @ViewBuilder
@@ -46,24 +47,17 @@ struct ArticleDetailsView: View {
 
     @ViewBuilder
     private func publisherInfo() -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                if let author = article.author {
-                    Text("By \(author)")
-                }
-
-                if let publishedAt = article.publishedAt {
-                    Spacer()
-                    Text(publishedAt, format: .dateTime)
-                }
+        HStack {
+            if let author = article.author {
+                Text("By \(author)")
             }
-            .fontWeight(.medium)
 
-            if let url = article.url {
-                Link("Read more...", destination: url)
-                    .foregroundStyle(.tint)
+            if let publishedAt = article.publishedAt {
+                Spacer()
+                Text(publishedAt, format: .dateTime)
             }
         }
+        .fontWeight(.medium)
         .font(.subheadline)
         .foregroundStyle(.secondary)
     }
@@ -76,6 +70,20 @@ struct ArticleDetailsView: View {
 
             Text(markdown: article.descriptions)
             Text(markdown: article.content)
+        }
+    }
+
+    @ToolbarContentBuilder
+    private func toolBarContent() -> some ToolbarContent {
+        ToolbarItem(placement: .bottomBar) {
+            if let url = article.url {
+                Link("Read more", destination: url)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 42)
+                    .background(Color.blue)
+                    .clipShape(.rect(cornerRadius: 10))
+            }
         }
     }
 }
