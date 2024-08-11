@@ -12,42 +12,28 @@ import XCTest
 @testable import Domain
 
 final class NewsUseCaseTests: XCTestCase {
-    private var context: ModelContext?
-
     private var networkClient: MockedNetworkClient!
     private var sut: DefaultNewsUseCase!
 
     override func setUp() {
-        // To use SwiftData model NewsArticle, it needs to set the context in the memory,
-        // otherwise it crashes when running tests
-        let schema = Schema([NewsArticle.self])
-        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        guard let container = try? ModelContainer(for: schema, configurations: [config]) else {
-            XCTFail("Failed to set up model container")
-            return
-        }
-        context = ModelContext(container)
-
         networkClient = .init()
         sut = .init(networkClient: networkClient)
     }
 
     override func tearDown() {
-        context = nil
-
         sut = nil
         networkClient = nil
     }
 
     func testInitialFetchAndCachePopulation() async throws {
         let expectedArticles = [
-            makeNewsArticle(title: "Article 1"),
-            makeNewsArticle(title: "Article 2")
+            makeArticle(title: "Article 1"),
+            makeArticle(title: "Article 2")
         ]
         let networkResponse = NewsNetworkResponse(
             status: "OK",
             totalResults: expectedArticles.count,
-            articles: expectedArticles.map(\.networkResponseArticle)
+            articles: expectedArticles
         )
         networkClient.data = makeJSONData(networkResponse)
 
@@ -64,13 +50,13 @@ final class NewsUseCaseTests: XCTestCase {
 
     func testCacheRetrieval() async throws {
         let expectedArticles = [
-            makeNewsArticle(title: "Article 1"),
-            makeNewsArticle(title: "Article 2")
+            makeArticle(title: "Article 1"),
+            makeArticle(title: "Article 2")
         ]
         let networkResponse = NewsNetworkResponse(
             status: "OK",
             totalResults: expectedArticles.count,
-            articles: expectedArticles.map(\.networkResponseArticle)
+            articles: expectedArticles
         )
         networkClient.data = makeJSONData(networkResponse)
 
@@ -92,12 +78,12 @@ final class NewsUseCaseTests: XCTestCase {
 
     func testForceRefresh() async throws {
         let initialArticles = [
-            makeNewsArticle(title: "Initial Article")
+            makeArticle(title: "Initial Article")
         ]
         let initialResponse = NewsNetworkResponse(
             status: "OK",
             totalResults: initialArticles.count,
-            articles: initialArticles.map(\.networkResponseArticle)
+            articles: initialArticles
         )
         networkClient.data = makeJSONData(initialResponse)
 
@@ -105,12 +91,12 @@ final class NewsUseCaseTests: XCTestCase {
         _ = try await sut.getAllNewsArticles()
 
         let refreshedArticles = [
-            makeNewsArticle(title: "Refreshed Article")
+            makeArticle(title: "Refreshed Article")
         ]
         let refreshedResponse = NewsNetworkResponse(
             status: "OK",
             totalResults: refreshedArticles.count,
-            articles: refreshedArticles.map(\.networkResponseArticle)
+            articles: refreshedArticles
         )
         networkClient.data = makeJSONData(refreshedResponse)
 
@@ -128,12 +114,12 @@ final class NewsUseCaseTests: XCTestCase {
 
     func testCacheInvalidatingOnForceRefresh() async throws {
          let initialArticles = [
-             makeNewsArticle(title: "Initial Article")
+             makeArticle(title: "Initial Article")
          ]
          let initialResponse = NewsNetworkResponse(
              status: "OK",
              totalResults: initialArticles.count,
-             articles: initialArticles.map(\.networkResponseArticle)
+             articles: initialArticles
          )
          networkClient.data = makeJSONData(initialResponse)
 
@@ -141,12 +127,12 @@ final class NewsUseCaseTests: XCTestCase {
          _ = try await sut.getAllNewsArticles()
 
          let refreshedArticles = [
-             makeNewsArticle(title: "Refreshed Article")
+             makeArticle(title: "Refreshed Article")
          ]
          let refreshedResponse = NewsNetworkResponse(
              status: "OK",
              totalResults: refreshedArticles.count,
-             articles: refreshedArticles.map(\.networkResponseArticle)
+             articles: refreshedArticles
          )
          networkClient.data = makeJSONData(refreshedResponse)
 
@@ -168,34 +154,17 @@ final class NewsUseCaseTests: XCTestCase {
         try? JSONEncoder().encode(data)
     }
 
-    private func makeNewsArticle(title: String) -> NewsArticle {
-        NewsArticle(
+    private func makeArticle(title: String) -> Article {
+        Article(
             source: .init(id: nil, name: ""),
             author: "",
             title: title,
             description: "",
-            urlString: "",
+            url: "",
             urlToImage: nil,
+            imageData: nil,
             publishedAt: nil,
             content: ""
-        )
-    }
-}
-
-private extension NewsArticle {
-    var networkResponseArticle: NewsNetworkResponse.Article {
-        .init(
-            source: .init(
-                id: source.id,
-                name: source.name
-            ),
-            author: author,
-            title: title,
-            description: descriptions,
-            url: url?.absoluteString ?? "",
-            urlToImage: urlToImage?.absoluteString,
-            publishedAt: publishedAt,
-            content: content
         )
     }
 }

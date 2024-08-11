@@ -9,9 +9,9 @@ import AppFoundation
 import SwiftUI
 
 struct ArticlePreviewView: View {
-    var article: NewsArticle
+    var article: Article
 
-    init(article: NewsArticle) {
+    init(article: Article) {
         self.article = article
     }
 
@@ -26,7 +26,7 @@ struct ArticlePreviewView: View {
 }
 
 private struct ArticleSummeryView: View {
-    let article: NewsArticle
+    let article: Article
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -40,7 +40,7 @@ private struct ArticleSummeryView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text(markdown: article.descriptions)
+            Text(markdown: article.description)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)

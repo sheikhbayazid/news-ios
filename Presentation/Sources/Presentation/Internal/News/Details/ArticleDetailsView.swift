@@ -9,7 +9,7 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleDetailsView: View {
-    var article: NewsArticle
+    var article: Article
 
     var body: some View {
         container()
@@ -61,7 +61,7 @@ struct ArticleDetailsView: View {
             Text(markdown: article.title)
                 .font(.headline)
 
-            Text(markdown: article.descriptions)
+            Text(markdown: article.description)
             Text(markdown: article.content)
         }
     }
@@ -69,7 +69,7 @@ struct ArticleDetailsView: View {
     @ToolbarContentBuilder
     private func toolBarContent() -> some ToolbarContent {
         ToolbarItem(placement: .bottomBar) {
-            if let url = article.url {
+            if let url = URL(string: article.url) {
                 Link("Read more", destination: url)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
