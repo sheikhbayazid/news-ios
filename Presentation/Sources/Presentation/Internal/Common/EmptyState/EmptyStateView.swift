@@ -9,7 +9,7 @@ import SwiftUI
 
 enum EmptyStateType {
     case noData
-    case networkError
+    case networkError(message: String? = nil)
 }
 
 struct EmptyStateView: View {
@@ -46,10 +46,14 @@ struct EmptyStateView: View {
     var description: String {
         switch type {
         case .noData:
-            "Could not find any data. Please try again later."
+            return "Could not find any data. Please try again later."
 
-        case .networkError:
-            "Oops, something went wrong. Please try again later"
+        case .networkError(let message):
+            if let message {
+                return message
+            } else {
+                return "Oops, something went wrong. Please try again later"
+            }
         }
     }
 }
@@ -57,6 +61,6 @@ struct EmptyStateView: View {
 #Preview {
     VStack {
         EmptyStateView(type: .noData)
-        EmptyStateView(type: .networkError)
+        EmptyStateView(type: .networkError())
     }
 }

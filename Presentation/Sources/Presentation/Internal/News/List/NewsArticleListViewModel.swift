@@ -37,7 +37,7 @@ final class NewsArticleListViewModel: ObservableObject {
                     saveArticlesToStorage(context: context, articles: articles)
                 }
             } catch {
-                handleNetworkError(with: storedArticles)
+                handleNetworkError(with: storedArticles, error: error)
             }
 
             isLoading = false
@@ -60,15 +60,15 @@ final class NewsArticleListViewModel: ObservableObject {
             }
         } catch {
             DispatchQueue.main.async {
-                self.handleNetworkError(with: storedArticles)
+                self.handleNetworkError(with: storedArticles, error: error)
             }
         }
     }
 
     /// Handles the network error. If there are stored data then stored data is shown otherwise, shows error state
-    private func handleNetworkError(with storedArticles: [NewsArticle]) {
+    private func handleNetworkError(with storedArticles: [NewsArticle], error: Error) {
         if storedArticles.isEmpty {
-            self.emptyState = .networkError
+            self.emptyState = .networkError(message: error.localizedDescription)
         } else if articles.isEmpty {
             articles = storedArticles
         }
