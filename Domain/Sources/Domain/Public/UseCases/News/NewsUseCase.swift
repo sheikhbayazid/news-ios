@@ -46,14 +46,20 @@ public final class DefaultNewsUseCase: NewsUseCase {
             .filter {
                 $0.title != removedArticleTitle
             }
-            .sorted {
-                guard let lhsPublishedDate = $0.publishedAt, let rhsPublishedData = $1.publishedAt else {
-                    return true
-                }
-                return lhsPublishedDate > rhsPublishedData
-            }
+            .sortedByDate()
 
         cache = articles
         return articles
+    }
+}
+
+private extension [Article] {
+    func sortedByDate() -> [Article] {
+        sorted {
+            guard let lhsPublishedDate = $0.publishedAt, let rhsPublishedData = $1.publishedAt else {
+                return false
+            }
+            return lhsPublishedDate > rhsPublishedData
+        }
     }
 }
