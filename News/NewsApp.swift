@@ -31,7 +31,7 @@ struct NewsApp: App {
         let apiBaseURL = "https://newsapi.org"
         let apiVersion = "v2"
 
-        // Replace the string with actual API Key.
+        #warning("Replace the placeholder with your API Key.")
         var apiKey = "YOUR_API_KEY"
 
         let apiKeyConfigValue: String? = try? Configuration.value(for: "API_KEY")
