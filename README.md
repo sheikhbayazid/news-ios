@@ -24,7 +24,7 @@ This iOS application is designed to display news articles fetched from [NewsAPI]
 
 ## Storage
 
-- **SwiftData**: Used for local storage and caching.
+- **SwiftData**: Used for local storage.
 
 ## Code Style
 
@@ -32,12 +32,6 @@ This iOS application is designed to display news articles fetched from [NewsAPI]
 
   ```
   brew install swiftlint
-  ```
-
-  Run checks with:
-
-  ```
-  swiftlint
   ```
 
 ## Getting Started
