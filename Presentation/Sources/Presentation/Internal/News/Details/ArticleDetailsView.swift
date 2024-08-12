@@ -9,8 +9,6 @@ import AppFoundation
 import SwiftUI
 
 struct ArticleDetailsView: View {
-    @Environment(\.modelContext) private var modelContext
-
     let article: Article
 
     var body: some View {
